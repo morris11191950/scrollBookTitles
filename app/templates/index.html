@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+     <head>
+          <title>My Webpage</title>
+          <style>
+               .bookTitle {
+                    background-color: #77dd11;
+                    padding: 20px;
+                    margin: 10px;
+               }
+
+               body {
+                    padding-bottom: 50px;
+                    }
+          </style>
+
+     <script>
+          // Start with first bookTitle
+          let counter = 1;
+
+          // Load bookTitles 20 at a time
+          const quantity = 20;
+
+          // When DOM loads, render the first 20 bookTitlies
+          document.addEventListerner('DOMContentLoaded', load);
+          //
+          // If scrolled to bottom, load the next
+          window.onscroll = () => {
+                if (window.innerHeight + window.scrollY >= document.body.offsetHeight)
+                          load();
+                };
+
+          // Load next set of booktitles.
+          function load() {
+
+               //document.write ("Loading!   ");
+
+          //    Set start and end bookTitles, and update counter
+                const start = counter;
+                const end = start + quantity - 1;
+                counter = end + 1;
+
+                //document.write ("start= ", start);
+
+          //     Open new request to get new bookTitle
+                const request = new XMLHttpRequest();
+                request.open('POST', '/bookTitles');
+                request.onload = () => {
+                    const data = JSON.parse(request.responseText);
+                    //document.write ("data ", data);
+                    data.forEach(add_bookTitle);
+                };
+
+          //     Add start and end points to request data
+                const data = new FormData();
+                data.append('start', start);
+                data.append('end', end);
+
+                //document.write ("data= ", data);
+
+          //    Send request
+                request.send(data);
+           };
+          //
+          function add_bookTitle(contents) {
+                //document.write ("contents ", contents);
+
+          //    Creat new bookTitle
+                const bookTitle = document.createElement('div');
+                bookTitle.className = 'bookTitle';
+                bookTitle.innerHTML = contents;
+
+                //document.write ("booktitle= ", contents);
+
+          //    Add book title to DOM.
+                document.querySelector('#bookTitles').append(bookTitle);
+           };
+
+          function sayHello()
+         {
+            document.write ("Hello there!");
+         }
+
+     </script>
+
+</head>
+<body>
+
+     <p>Click the following button to call the function</p>
+
+      <form>
+         <input type="button" onclick="sayHello()" value="Say Hello">
+         <input type="button" onclick="load()" value="Load">
+      </form>
+
+      <p>Use different text in write method and then try...</p>
+
+     <div id="bookTitles">
+
+          I am gone
+     </div>
+</body>
+
+</html>
