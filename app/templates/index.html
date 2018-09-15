@@ -15,6 +15,7 @@
           </style>
 
      <script>
+
           // Start with first bookTitle
           let counter = 1;
 
@@ -22,32 +23,30 @@
           const quantity = 20;
 
           // When DOM loads, render the first 20 bookTitlies
-          document.addEventListerner('DOMContentLoaded', load);
-          //
-          // If scrolled to bottom, load the next
-          window.onscroll = () => {
-                if (window.innerHeight + window.scrollY >= document.body.offsetHeight)
-                          load();
-                };
+          document.addEventListerner('DOMContentLoaded', load());
 
           // Load next set of booktitles.
           function load() {
 
-               //document.write ("Loading!   ");
+          // If scrolled to bottom, load the next
+          // This had to be moved from global to inside this function
+          //   to be recognized. Scrolling is not yet working
+          //   properly. Sometime 20 bookTitles, sometimes a lot more
+               window.onscroll = () => {
+                 if (window.innerHeight + window.scrollY >= document.body.offsetHeight)
+                         load();
+                     };
 
           //    Set start and end bookTitles, and update counter
                 const start = counter;
                 const end = start + quantity - 1;
                 counter = end + 1;
 
-                //document.write ("start= ", start);
-
           //     Open new request to get new bookTitle
                 const request = new XMLHttpRequest();
                 request.open('POST', '/bookTitles');
                 request.onload = () => {
                     const data = JSON.parse(request.responseText);
-                    //document.write ("data ", data);
                     data.forEach(add_bookTitle);
                 };
 
@@ -56,49 +55,31 @@
                 data.append('start', start);
                 data.append('end', end);
 
-                //document.write ("data= ", data);
-
           //    Send request
                 request.send(data);
            };
           //
           function add_bookTitle(contents) {
-                //document.write ("contents ", contents);
 
           //    Creat new bookTitle
                 const bookTitle = document.createElement('div');
                 bookTitle.className = 'bookTitle';
                 bookTitle.innerHTML = contents;
 
-                //document.write ("booktitle= ", contents);
 
           //    Add book title to DOM.
-                document.querySelector('#bookTitles').append(bookTitle);
+                document.querySelector("#bookTitles").style.backgroundColor = "red";
+                document.querySelector("#bookTitles").append(bookTitle);
            };
-
-          function sayHello()
-         {
-            document.write ("Hello there!");
-         }
 
      </script>
 
 </head>
 <body>
 
-     <p>Click the following button to call the function</p>
-
-      <form>
-         <input type="button" onclick="sayHello()" value="Say Hello">
-         <input type="button" onclick="load()" value="Load">
-      </form>
-
-      <p>Use different text in write method and then try...</p>
-
      <div id="bookTitles">
-
-          I am gone
      </div>
+
 </body>
 
 </html>

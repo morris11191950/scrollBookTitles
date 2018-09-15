@@ -1,12 +1,12 @@
 from app import app
 from flask import render_template, jsonify, request
-#import time
+import time
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/bookTitles', methods=["GET", "POST"])
+@app.route('/bookTitles', methods=["POST"])
 def bookTitles():
 
     # Get start and end point for book titles to generate
@@ -19,6 +19,6 @@ def bookTitles():
         data.append("Book Title #{}".format(i))
 
     # Artificially delay speed of response
-    #time.sleep(1)
+    time.sleep(1)
 
     return jsonify(data)
