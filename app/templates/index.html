@@ -22,25 +22,32 @@
           // Load bookTitles 20 at a time
           const quantity = 20;
 
-          // When DOM loads, render the first 20 bookTitlies
-          document.addEventListerner('DOMContentLoaded', load());
+          // When scroll is detected, render the 20 more bookTitlies
+          document.addEventListener("scroll", function(event) {
+               //console.log("flag", document.body.offsetHeight - (window.scrollY + window.innerHeight));
+                 if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+                    //console.log("Starting load function");
+                    //console.log(window.innerHeight);
+                         load();
+                    };
+                    });
+
+          // Render 20 book titles on initial load
+          document.addEventListener("DOMContentLoaded", function(event) {
+               console.log("DOM fully loaded and parsed - Starting load function");
+                    load();
+               });
 
           // Load next set of booktitles.
           function load() {
-
-          // If scrolled to bottom, load the next
-          // This had to be moved from global to inside this function
-          //   to be recognized. Scrolling is not yet working
-          //   properly. Sometime 20 bookTitles, sometimes a lot more
-               window.onscroll = () => {
-                 if (window.innerHeight + window.scrollY >= document.body.offsetHeight)
-                         load();
-                     };
 
           //    Set start and end bookTitles, and update counter
                 const start = counter;
                 const end = start + quantity - 1;
                 counter = end + 1;
+
+                //console.log("Start", start);
+                //console.log("End", end);
 
           //     Open new request to get new bookTitle
                 const request = new XMLHttpRequest();
@@ -58,7 +65,7 @@
           //    Send request
                 request.send(data);
            };
-          //
+
           function add_bookTitle(contents) {
 
           //    Creat new bookTitle

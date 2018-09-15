@@ -18,7 +18,8 @@ def bookTitles():
     for i in range(start, end + 1):
         data.append("Book Title #{}".format(i))
 
-    # Artificially delay speed of response
-    time.sleep(1)
+    # Artificially delay speed of response, this caused problems
+    #       with the counter, but the scroll workd fine when it is off
+    #time.sleep(1)
 
     return jsonify(data)
